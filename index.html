@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>password.coffee</title>
+    <link rel="shortcut icon" href="https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Fnoun_776909.png?1527909938739"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="/script.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/jquery-csv/src/jquery.csv.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css" rel="stylesheet"/>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css" type="text/css" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        password.<em>coffee</em> ☕
+      </h1>
+      <h2>
+        Locations, descriptions, and those 🔑's to the Wifi kingdom. 🗺️
+      </h2>
+    </header>
+
+    <main>
+      <p>
+        I ❤️ coffee! Occasionally I'll walk into an unfamiliar shop or somewhere I haven't been in a while, ready to take on the world, 💻 and 📱 in hand, only to realize I don't know what the Wifi password is. 
+      </p>
+      <p>
+        A lot of places will have this 🔑 information posted somewhere, however, I find the moment you start looking for something is the moment it truly disappears.
+      </p>
+      <p>
+        I created <a href="http://password.coffee">password.<em>coffee</em> ☕</a> as a repository of all the usernames and passwords of each coffeshop that I've ever been to (or hope to go to). It is not comprehensive, nor complete, but it works well enough for me.
+      </p>
+      <p>
+        If you want to submit a new coffeeshop or update an existing one, <a href="https://passwordcoffee.typeform.com/to/tXXeRP">head over here</a>, it will only take a minute 🏃.
+      </p>
+      
+            <!--<form action="your-server-side-code" method="POST">
+              <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_ZVsBadLKCnuihaKoHVBpzFrwXzOmC"
+                data-amount="100"
+                data-name="Colin"
+                data-description="Widget"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto">
+              </script>
+            </form> -->
+      
+      <div id="map"></div>
+    </main>
+    <script>
+      // Display a Mapbox map
+      mapboxgl.accessToken = 'pk.eyJ1IjoiY3BkaXMiLCJhIjoiY2podDd4MDc2MGF3NTNrbXlndGRkZTJhbCJ9.50k6sCOrrzrsYsBFqIGIww';
+      
+      // Details on the Mapbox API here: https://www.mapbox.com/mapbox-gl-js/api/#map
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        zoom: 13
+      });
+      
+      // Add search box
+      var geocoder = new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken
+      });
+      
+      map.addControl(geocoder, 'top-left');
+
+      map.on('load', updateGeocoderProximity); // set proximity on map load
+      map.on('moveend', updateGeocoderProximity); // and then update proximity each time the map moves
+
+      function updateGeocoderProximity() {
+          // proximity is designed for local scale, if the user is looking at the whole world,
+          // it doesn't make sense to factor in the arbitrary centre of the map
+          if (map.getZoom() > 9) {
+              var center = map.getCenter().wrap(); // ensures the longitude falls within -180 to 180 as the Geocoding API doesn't accept values outside this range
+              geocoder.setProximity({ longitude: center.lng, latitude: center.lat });
+          } else {
+              geocoder.setProximity(null);
+          }
+      }
+      
+      // Add geolocate control to the map.
+      var geo = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
+      
+      map.addControl(geo, 'top-right');
+      
+      // Add zoom and rotation controls to the map.
+      var nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, 'bottom-right');
+      
+      var bounds = new mapboxgl.LngLatBounds();     
+      // Import data from CSV to display as map items
+      $.ajax({
+        type: "GET",
+        url: "https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Fpoints-of-interest%20(20180615%201137).csv?1529080663961"
+      })
+      .then(function(csv) {
+        var data = $.csv.toObjects(csv);
+        data.forEach(function(listing) {
+          var el = document.createElement('div');
+          el.className = 'marker';
+          
+          var lat = listing.lat;
+          var lng = listing.lng;
+
+          new mapboxgl.Marker(el)
+          .setLngLat([lng, lat])
+          .setPopup(new mapboxgl.Popup()
+            .setHTML(getHTML(listing)))
+          .addTo(map);
+
+          bounds.extend([lng, lat]);
+        });        
+        map.fitBounds(bounds, {
+          linear: true,
+          padding: 50, 
+          maxZoom:14
+        });
+      });
+    </script>
+  </body>
+  <footer style="position:relative; top:10px;">Created on 🎏. Hosted on <img src="https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Foctocat.png?1529003970401" alt="octocat" height="17px" width="17px" margin-bottom="-6px">. Made with ☕.</footer>
+</html>

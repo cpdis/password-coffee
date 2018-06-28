@@ -40,18 +40,9 @@
       <p>
         If you want to submit a new coffeeshop or update an existing one, <a href="https://passwordcoffee.typeform.com/to/tXXeRP">head over here</a>, it will only take a minute 🏃.
       </p>
-      
-            <!--<form action="your-server-side-code" method="POST">
-              <script
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_ZVsBadLKCnuihaKoHVBpzFrwXzOmC"
-                data-amount="100"
-                data-name="Colin"
-                data-description="Widget"
-                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                data-locale="auto">
-              </script>
-            </form> -->
+      <p>
+        Created on 🎏. Hosted on <img src="https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Foctocat.png?1529003970401" alt="octocat" height="17px" width="17px" margin-bottom="-6px">. Made with ☕.
+      </p>
       
       <div id="map"></div>
     </main>
@@ -105,7 +96,7 @@
       // Import data from CSV to display as map items
       $.ajax({
         type: "GET",
-        url: "https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Fpoints-of-interest%20(20180615%201137).csv?1529080663961"
+        url: "https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2FGlitch%20Map%20Points%20of%20Interest%20(20180626%201047).csv?1530071535338"
       })
       .then(function(csv) {
         var data = $.csv.toObjects(csv);
@@ -132,5 +123,7 @@
       });
     </script>
   </body>
-  <footer style="position:relative; top:10px;">Created on 🎏. Hosted on <img src="https://cdn.glitch.com/5e6985a7-6ac5-4ff6-b5dd-a378f79c584b%2Foctocat.png?1529003970401" alt="octocat" height="17px" width="17px" margin-bottom="-6px">. Made with ☕.</footer>
+  <footer style="position:relative; top:10px;">
+        <style>.bmc-button img{width: 27px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{line-height: 36px !important;height:37px !important;text-decoration: none !important;display:inline-flex !important;color:#ffffff !important;background-color:#000000 !important;border-radius: 3px !important;border: 1px solid transparent !important;padding: 0px 9px !important;font-size: 17px !important;letter-spacing:-0.08px !important;;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Lato', sans-serif !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;-o-transition: 0.3s all linear !important;-webkit-transition: 0.3s all linear !important;-moz-transition: 0.3s all linear !important;-ms-transition: 0.3s all linear !important;transition: 0.3s all linear !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#ffffff !important;}</style><link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/AyTfzdFre"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">Buy me a coffee</span></a>
+  </footer>
 </html>
